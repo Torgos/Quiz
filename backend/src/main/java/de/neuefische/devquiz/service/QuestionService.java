@@ -1,6 +1,8 @@
 package de.neuefische.devquiz.service;
 
+import de.neuefische.devquiz.model.Answer;
 import de.neuefische.devquiz.model.Question;
+import de.neuefische.devquiz.model.ValidationInfo;
 import de.neuefische.devquiz.repo.QuestionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,5 +36,17 @@ public class QuestionService {
             throw new NoSuchElementException("Question with ID " + id + " not found!");
         }
         return optionalQuestion.get();
+    }
+
+    public ValidationInfo validateQuestion(ValidationInfo InputQuestionIdAndAnswerId) {
+        Optional<Question> questionToCheck = questionRepo.findById(InputQuestionIdAndAnswerId.getQuestionID());
+        List<Answer> allAnswer = questionToCheck.get().getAnswers();
+        ValidationInfo validationAnswer= new ValidationInfo(InputQuestionIdAndAnswerId.getQuestionID(), null);
+        for (Answer answer : allAnswer){
+            if(answer.isCorrect()){
+                validationAnswer.setAnswerID(answer.getId());
+            }
+        }
+        return validationAnswer;
     }
 }
