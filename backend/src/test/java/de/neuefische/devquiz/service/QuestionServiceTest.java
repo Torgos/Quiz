@@ -1,6 +1,8 @@
 package de.neuefische.devquiz.service;
 
+import de.neuefische.devquiz.model.Answer;
 import de.neuefische.devquiz.model.Question;
+import de.neuefische.devquiz.model.ValidationInfo;
 import de.neuefische.devquiz.repo.QuestionRepo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -55,5 +57,21 @@ class QuestionServiceTest {
         assertEquals(expected, actual);
         verify(questionRepo).save(expected);
     }
+
+    /*@Test
+    void validateRightQuestionTest(){
+        Question testDataSet = new Question("999", "Frage?", List.of(
+                new Answer("1", "Richtig", true),
+                new Answer("2", "Falsch", false),
+                new Answer("3", "Falsch", false)
+        ));
+        //Given
+        ValidationInfo inputValidation = new ValidationInfo("999", "1");
+        //When
+        ValidationInfo actual = questionService.validateQuestion(inputValidation);
+        //Then
+        ValidationInfo expected = new ValidationInfo("999", "1");
+        assertEquals(expected, actual);
+    }*/
 
 }
