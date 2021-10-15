@@ -20,18 +20,19 @@ public class QuestionService {
     }
 
     public List<Question> getAllQuestions() {
-        return questionRepo.getAllQuestions();
+        return questionRepo.findAll();
     }
 
     public Question addQuestion(Question newQuestion){
-        return questionRepo.addQuestion(newQuestion);
+        return questionRepo.save(newQuestion);
     }
 
 
-    public Optional<Question> get(String id) {
-        if (id == null) {
-            throw new NullPointerException("Id not found!");
+    public Question get(String id) {
+        Optional<Question> optionalQuestion = questionRepo.findById(id);
+        if (optionalQuestion.isEmpty()) {
+            throw new NoSuchElementException("Question with ID " + id + " not found!");
         }
-        return questionRepo.get(id);
+        return optionalQuestion.get();
     }
 }

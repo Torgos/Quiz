@@ -28,7 +28,7 @@ class DevQuizControllerTest {
 
     @BeforeEach
     public void clearDb() {
-        questionRepo.clear();
+        questionRepo.deleteAll();
     }
 
     @LocalServerPort
@@ -38,9 +38,9 @@ class DevQuizControllerTest {
     @DisplayName("Should return a list with all questions from db")
     void testListQuestion() {
         // GIVEN
-        questionRepo.addQuestion(new Question("1", "Question with ID '1'", null));
-        questionRepo.addQuestion(new Question("2", "Question with ID '2'", null));
-        questionRepo.addQuestion(new Question("3", "Question with ID '3'", null));
+        questionRepo.save(new Question("1", "Question with ID '1'", null));
+        questionRepo.save(new Question("2", "Question with ID '2'", null));
+        questionRepo.save(new Question("3", "Question with ID '3'", null));
         // WHEN
         ResponseEntity<Question[]> responseEntity = testRestTemplate.getForEntity("/api/question", Question[].class);
         // THEN
@@ -58,7 +58,7 @@ class DevQuizControllerTest {
     void testGet() {
         // GIVEN
         Question question = new Question("302", "Question with ID '302'", null);
-        questionRepo.addQuestion(question);
+        questionRepo.save(question);
         // WHEN
         ResponseEntity<Question> responseEntity = testRestTemplate.getForEntity("/api/question/" + question.getId(), Question.class);
         // THEN

@@ -24,7 +24,7 @@ public class DevQuizController {
     }
 
     @GetMapping("/api/question/{id}")
-    public Optional<Question> get(@PathVariable String id) {
+    public Question get(@PathVariable String id) {
         return questionService.get(id);
     }
 

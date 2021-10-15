@@ -10,38 +10,47 @@ import static org.mockito.Mockito.*;
 
 class QuestionServiceTest {
 
-    QuestionRepo questionRepo = mock(QuestionRepo.class);
-    QuestionService questionService;
+    private final QuestionRepo questionRepo = mock(QuestionRepo.class);
+    private final QuestionService questionService = new QuestionService(questionRepo);
 
     @Test
     @DisplayName("returns a list of all existing questions")
     void listQuestions() {
+        //GIVEN
+        List<Question> expected = List.of(new Question("1", "Frage?", List.of()), new Question("2", "Zweite Frage?", List.of()));
+        when(questionRepo.findAll()).thenReturn(expected);
 
+        //WHEN
+        List<Question> actual = questionService.getAllQuestions();
+
+        //THEN
+        Assertions.assertIterableEquals(expected, actual);
+        verify(questionRepo).findAll();
     }
 
     @Test
     @DisplayName("Should throw a exception when the given id is not in the db")
     void testGet_IdNotFound() {
         //GIVEN
-        Question questionToAdd = new Question(
-           "205",
-           "Question with id '205'",
-           null
-        );
-        questionRepo.addQuestion(questionToAdd);
-
-        when(questionRepo.get("209")).thenThrow(NullPointerException.class);
+        when(questionRepo.findById("209")).thenReturn(Optional.empty());
 
         //WHEN
-        verify(questionRepo).addQuestion(questionToAdd);
-        Assertions.assertThrows(NullPointerException.class, () -> {
-            questionService.get("209");
-        });
+        Assertions.assertThrows(NoSuchElementException.class, () -> questionService.get("209"));
 
-
+        verify(questionRepo).findById("209");
     }
 
     @Test
     void addQuestion() {
+        //GIVEN
+        Question expected = new Question("999", "Frage?", List.of());
+        when(questionRepo.save(expected)).thenReturn(expected);
+
+        //WHEN
+        Question actual = questionService.addQuestion(expected);
+
+        //THEN
+        assertEquals(expected, actual);
+        verify(questionRepo).save(expected);
     }
 }
