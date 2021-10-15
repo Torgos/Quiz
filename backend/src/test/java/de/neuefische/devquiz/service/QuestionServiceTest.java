@@ -17,7 +17,7 @@ class QuestionServiceTest {
 
     @Test
     @DisplayName("returns a list of all existing questions")
-    void listQuestions() {
+    void listQuestionsTest() {
         //GIVEN
         List<Question> expected = List.of(new Question("1", "Frage?", List.of()), new Question("2", "Zweite Frage?", List.of()));
         when(questionRepo.findAll()).thenReturn(expected);
@@ -43,7 +43,7 @@ class QuestionServiceTest {
     }
 
     @Test
-    void addQuestion() {
+    void addQuestionTest() {
         //GIVEN
         Question expected = new Question("999", "Frage?", List.of());
         when(questionRepo.save(expected)).thenReturn(expected);
@@ -55,4 +55,5 @@ class QuestionServiceTest {
         assertEquals(expected, actual);
         verify(questionRepo).save(expected);
     }
+
 }
