@@ -1,45 +1,42 @@
 import * as React from 'react'
 import Answer from './Answer'
 import styled from 'styled-components'
-import {getQuestions} from "../service/DevQuizApiService";
 import {useState} from "react";
 import {validateAnswers} from "../service/DevQuizApiService";
 
-function Question({ question }) {
+function Question({question}) {
 
-    const [answerIdState, setAnswerIdState]= useState("")
-    const [correctAnswerIdState, setCorrectAnswerIdState]= useState("")
+    const [answerIdState, setAnswerIdState] = useState("")
 
     const handleChoice = answerId => setAnswerIdState(answerId);
 
-  function validateAnswer(){
-      const validateObject = {
-          questionID: question.id,
-          answerID: answerIdState
-      }
-      validateAnswers(validateObject).then(result =>{
-          if(JSON.stringify(result)===JSON.stringify(validateObject)){
-              setCorrectAnswerIdState(true);
-              console.log("Stimmt")
-          }else{
-              setCorrectAnswerIdState(false);
-              console.log("Stimmt nicht")
-          }
-      })
-  }
+    function validateAnswer() {
+        const validateObject = {
+            questionID: question.id,
+            answerID: answerIdState
+        }
+        validateAnswers(validateObject).then(result => {
+            if (JSON.stringify(result) === JSON.stringify(validateObject)) {
+                console.log("Stimmt")
+            } else {
+                console.log("Stimmt nicht")
+            }
+        })
+    }
 
-  return (
-    <QuestionContainer>
-      <h3>{question.questionText}</h3>
-      <AnswerContainer>
-        {question.answers.map(answer => (
-          <Answer answer={answer} key={answer.id} questionId={question.id} handleChoice={handleChoice}/>
-        ))}
-      </AnswerContainer>
-      <CheckButton onClick={validateAnswer}>Check Answer</CheckButton>
-    </QuestionContainer>
-  )
+    return (
+        <QuestionContainer>
+            <h3>{question.questionText}</h3>
+            <AnswerContainer>
+                {question.answers.map(answer => (
+                    <Answer answer={answer} key={answer.id} questionId={question.id} handleChoice={handleChoice}/>
+                ))}
+            </AnswerContainer>
+            <CheckButton onClick={validateAnswer}>Check Answer</CheckButton>
+        </QuestionContainer>
+    )
 }
+
 export default Question
 
 const QuestionContainer = styled.section`
